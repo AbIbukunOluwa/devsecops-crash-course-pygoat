@@ -1,0 +1,37 @@
+name: CI
+# name of the workflow
+
+on: [push]
+#what will trigger the pipeline. Here whenever there is a push in the repo, this workflow will run no matter the branch.
+
+jobs:
+#the jobs we will be performing and this will be a security scan job. 
+  sast_scan:
+    name: Run Bandit Scan
+    #type of job to be performed
+    runs-on: ubuntu-latest
+    #this wil specify the os for the scan to run on. You can use windows or mac-os.
+
+    steps:
+    # entails the things we need to put in place for the workflow to take place. A step by step process to be followed.
+    - name: Checkout code
+      #puts or code on the machine i.e ubuntu
+      uses: actions/checkout@v2
+      # helps us checkout the code, the actions is like a function that cantains codes that helps in checking out.
+
+    - name: Set up Python
+      # responsible for installing python on the ubuntu server
+      uses: actions/setup-python@v2
+      # another function used for set things uop or installing apps.
+      with:
+      # specifying version of python to be used.
+        python-version: 3.8
+
+    - name: Install Bandit
+    # we are installing Bandit. The name is just stating what you want to do
+      run: pip install bandit
+      #code to run to install bandit
+
+    - name: Run Bandit Scan
+      run: bandit -r .
+      # this scans everything in the current folder. This is a recursive scan tht will scan all subdirectories too.
